@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.deletion import CASCADE
+from django.db.models.enums import Choices
 
 class Student(models.Model):
     name= models.CharField(max_length=30, blank=False, null=False)
@@ -22,3 +24,14 @@ class Course(models.Model):
 
     def __str__(self):
         return self.description
+
+class Subscription(models.Model):
+    PERIOD = {
+        ('M', 'Matutino'),
+        ('V', 'Verspertino'),
+        ('N', 'Noturno')
+    }
+
+    period = models.CharField(max_length=1, null= False, blank=False, choices=PERIOD, default='N')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
